@@ -7,10 +7,9 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import org.bukkit.Server;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import java.awt.*;
+import java.awt.Color;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -92,7 +91,6 @@ public final class DiscordBanAnnouncer extends JavaPlugin implements Listener {
             @Override
             public void entryRemoved(Entry entry){
                 EmbedBuilder eb = new EmbedBuilder();
-                TextChannel textChannel = jda.getTextChannelById("1004356277301952572");
                 String playername = getName(entry.getUuid());
                 eb.setImage("https://minotar.net/helm/"+playername+"/100.png");
                 if (entry.getType().equals("ban")) {
