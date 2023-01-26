@@ -2,5 +2,7 @@ name: DiscordBanAnnouncer
 version: '${project.version}'
 main: me.headzz.discordbanannouncer.DiscordBanAnnouncer
 api-version: 1.19
-author: Headzz
+authors:
+  - Headzz
+  - Hellin
 softdepend: [LiteBans]
