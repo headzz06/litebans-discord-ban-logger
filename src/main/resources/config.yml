@@ -1,7 +1,2 @@
-UseBot: true # If this is set to false then it will attempt to send a webhook instead.
-
-BotToken: "BOT TOKEN HERE"
-ChannelID: "DISCORD CHANNEL ID HERE"
-
-# These webhook urls are only used if UseBot is set to false:
-WebhookURL: "WEBHOOK URL HERE"
+BotToken: 'BOT TOKEN HERE'
+ChannelID: 'DISCORD CHANNEL ID HERE'
