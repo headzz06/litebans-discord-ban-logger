@@ -42,10 +42,10 @@ public final class DiscordBanAnnouncer extends JavaPlugin implements Listener {
 
         this.useBot = config.getBoolean("UseBot");
 
-        if (this.useBot)
+        if (this.useBot) {
             if (this.initJda())
                 return;
-        else {
+        } else {
             this.initWebhook();
 
             try {
