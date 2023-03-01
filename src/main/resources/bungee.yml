@@ -1,9 +1,10 @@
 name: DiscordBanAnnouncer
 version: '${project.version}'
-main: me.headzz.discordbanannouncer.DiscordBanAnnouncer
+main: me.headzz.discordbanannouncer.DiscordBanAnnouncerBungee
 description: "Allows you to log LiteBans related activity to a discord channel"
 api-version: 1.13
 authors:
   - Headzz
   - Hellin
-softdepend: [LiteBans]
+softDepends:
+  - LiteBans

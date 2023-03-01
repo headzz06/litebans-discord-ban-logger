@@ -1,6 +1,6 @@
 package me.headzz.discordbanannouncer.handle.entries;
 
-import me.headzz.discordbanannouncer.DiscordBanAnnouncer;
+import me.headzz.discordbanannouncer.utility.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 public abstract class Entry {
@@ -38,7 +38,7 @@ public abstract class Entry {
 
     protected void sendEmbed() {
         try {
-            DiscordBanAnnouncer.instance.textChannel.sendMessageEmbeds(this.embedBuilder.build()).queue();
+            Utilities.getInstance().getTextChannel().sendMessageEmbeds(this.embedBuilder.build()).queue();
         } catch (final Exception ignored) {}
     }
 

@@ -1,7 +1,6 @@
 package me.headzz.discordbanannouncer.utility;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 
@@ -33,7 +32,7 @@ public final class WebhookUtils {
         }
     }
 
-    public static final WebhookUtils newWebhookUtils(final String url) {
+    public static WebhookUtils newWebhookUtils(final String url) {
         return new WebhookUtils(url);
     }
 }
