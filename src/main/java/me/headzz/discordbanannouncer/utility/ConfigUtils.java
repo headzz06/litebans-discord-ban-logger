@@ -47,10 +47,12 @@ public final class ConfigUtils {
 
         final File data = new File(playerDataDir, String.format("%s.yml", uuid));
 
-        if (data.exists())
-            throw new FileAlreadyExistsException(String.format("%s already exists", uuid));
-
-        data.createNewFile();
+        if (!data.exists()) {
+            data.createNewFile();
+        } else {
+            if (getName(name).equals(name))
+                return;
+        }
 
         if (useBuiltIn) {
             final org.bukkit.configuration.file.YamlConfiguration config = new org.bukkit.configuration.file.YamlConfiguration();
