@@ -8,10 +8,10 @@ public class JDAListener extends ListenerAdapter {
     @Override
     public void onReady(final ReadyEvent e) {
         try {
-            final String channelID = DiscordBanAnnouncer.instance.getConfig().getString("ChannelID");
-            DiscordBanAnnouncer.instance.textChannel = DiscordBanAnnouncer.instance.getJDA().getTextChannelById(channelID);
+            final String channelID = Utilities.getInstance().getChannelId();
+            Utilities.getInstance().setTextChannel(Utilities.getInstance().getJDA().getTextChannelById(channelID));
         } catch (final Exception exception) {
-            DiscordBanAnnouncer.instance.disable(exception, "Invalid Channel ID! Disabling plugin!");
+            Utilities.getInstance().disable(exception, "Invalid Channel ID! Disabling plugin!");
         }
     }
 }

@@ -1,8 +1,8 @@
 package me.headzz.discordbanannouncer.handle.entries.impl;
 
-import me.headzz.discordbanannouncer.DiscordBanAnnouncer;
 import me.headzz.discordbanannouncer.handle.entries.Entry;
 import me.headzz.discordbanannouncer.utility.GenericMessages;
+import me.headzz.discordbanannouncer.utility.Utilities;
 import me.headzz.discordbanannouncer.utility.WebhookColors;
 import me.headzz.discordbanannouncer.utility.WebhookUtils;
 
@@ -29,7 +29,7 @@ public class DelMute extends Entry {
 
     @Override
     public void executeDiscordWebhook() {
-        WebhookUtils.newWebhookUtils(DiscordBanAnnouncer.instance.getWebhookURL()).execute(String.format("{\"content\":null,\"embeds\":[{\"title\":\"New Unmute\",\"color\":%s,\"fields\":[{\"name\":\"%s\",\"value\":\"%s\"},{\"name\":\"%s\",\"value\":\"%s\",\"inline\":true},{\"name\":\"%s\",\"value\":\"%s\",\"inline\":true}],\"thumbnail\":{\"url\":\"%s\"}}],\"attachments\":[]}", WebhookColors.GREEN.getHexCode(),
+        WebhookUtils.newWebhookUtils(Utilities.getInstance().getWebhookURL()).execute(String.format("{\"content\":null,\"embeds\":[{\"title\":\"New Unmute\",\"color\":%s,\"fields\":[{\"name\":\"%s\",\"value\":\"%s\"},{\"name\":\"%s\",\"value\":\"%s\",\"inline\":true},{\"name\":\"%s\",\"value\":\"%s\",\"inline\":true}],\"thumbnail\":{\"url\":\"%s\"}}],\"attachments\":[]}", WebhookColors.GREEN.getHexCode(),
                 GenericMessages.USERNAME, super.getPlayerName(),
                 GenericMessages.REMOVED_BY, super.getStaffName(),
                 GenericMessages.REASON, this.reason, super.getImageURL()));

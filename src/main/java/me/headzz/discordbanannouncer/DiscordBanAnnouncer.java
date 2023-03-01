@@ -1,32 +1,27 @@
 package me.headzz.discordbanannouncer;
 
-import litebans.api.Entry;
-import litebans.api.Events;
-import me.headzz.discordbanannouncer.handle.Handler;
-import me.headzz.discordbanannouncer.utility.JDAListener;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.utils.ChunkingFilter;
-import net.dv8tion.jda.api.utils.MemberCachePolicy;
-import org.bukkit.configuration.file.FileConfiguration;
+import me.headzz.discordbanannouncer.utility.ConfigUtils;
+import me.headzz.discordbanannouncer.utility.Utilities;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.net.URL;
+import java.io.File;
 import java.util.logging.Logger;
 
 public final class DiscordBanAnnouncer extends JavaPlugin implements Listener {
     public static DiscordBanAnnouncer instance = null;
 
-    private FileConfiguration config;
+    private File dataFolder;
+    private File configFile;
+    private YamlConfiguration config;
     private Logger logger;
-    private boolean useBot;
-    private JDA jda;
-    public TextChannel textChannel;
-    private String webhookURL;
+    private Utilities utilities;
 
     public DiscordBanAnnouncer() {
         instance = this;
@@ -34,54 +29,29 @@ public final class DiscordBanAnnouncer extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        this.config = super.getConfig();
         this.logger = super.getLogger();
+        this.dataFolder = super.getDataFolder();
 
-        this.config.options().copyDefaults();
-        super.saveDefaultConfig();
+        this.utilities = Utilities.getInstance(this);
 
-        this.useBot = config.getBoolean("UseBot");
-
-        if (this.useBot) {
-            if (this.initJda())
-                return;
-        } else {
-            this.initWebhook();
-
-            try {
-                new URL(this.webhookURL); // Check if it is a real url
-            } catch (final Exception exception) {
-                this.disable(exception, "Webhook url is not real.");
-                return;
-            }
-        }
-
-        this.registerEvents();
-        getServer().getPluginManager().registerEvents(this, this);
-    }
-
-    private boolean initJda() {
         try {
-            this.jda = JDABuilder.createDefault(this.config.getString("BotToken"))
-                    .setChunkingFilter(ChunkingFilter.ALL)
-                    .setMemberCachePolicy(MemberCachePolicy.ALL)
-                    .enableIntents(GatewayIntent.GUILD_MEMBERS)
-                    .setActivity(Activity.watching("server punishments"))
-                    .build();
+            this.configFile = ConfigUtils.saveConfigFromResources(dataFolder, false);
+        } catch (final Exception ignored) {}
 
-            this.jda.addEventListener(new JDAListener());
-        } catch (final Exception exception) {
-            this.disable(exception, "Cannot connect to Discord Bot using this BotToken! Disabling!");
-            return true;
+        this.config = YamlConfiguration.loadConfiguration(configFile);
+
+        try {
+            this.utilities.init(this.config.getBoolean("UseBot"), this.config.getString("WebhookURL"), this.config.getString("BotToken"), this.config.getString("ChannelID"));
+        } catch (final Exception ignored) {
+            return;
         }
 
-        return false;
+        Bukkit.getPluginManager().registerEvents(this, this);
     }
 
-    private void initWebhook() {
-        this.webhookURL = this.config.getString("WebhookURL");
-    }
-
+    /*
+     * This method needs to be in all instances of the main class
+     */
     public void disable(final Exception exception, final String reason) {
         exception.printStackTrace();
         this.logger.severe(reason);
@@ -90,44 +60,18 @@ public final class DiscordBanAnnouncer extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        if (jda != null)
-            jda.shutdownNow();
+        this.utilities.shutdown();
     }
 
-    private void registerEvents() {
-        Events.get().register(new Events.Listener(){
-            @Override
-            public void entryAdded(final Entry entry){
-                try {
-                    Handler.instance.handle(entry, false);
-                } catch (final Exception exception) {
-                    exception.printStackTrace();
-                }
-            }
-            @Override
-            public void entryRemoved(final Entry entry){
-                try {
-                    Handler.instance.handle(entry, true);
-                } catch (final Exception exception) {
-                    exception.printStackTrace();
-                }
-            }
-        });
-    }
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerJoin(final PlayerJoinEvent e) {
+        final Player p = e.getPlayer();
 
-    public FileConfiguration getConfig() {
-        return this.config;
-    }
+        final String uuid = String.valueOf(p.getUniqueId());
+        final String name = p.getName();
 
-    public JDA getJDA() {
-        return this.jda;
-    }
-
-    public String getWebhookURL() {
-        return this.webhookURL;
-    }
-
-    public boolean shouldUseBot() {
-        return this.useBot;
+        try {
+            ConfigUtils.saveName(uuid, name);
+        } catch (final Exception ignored) {}
     }
 }

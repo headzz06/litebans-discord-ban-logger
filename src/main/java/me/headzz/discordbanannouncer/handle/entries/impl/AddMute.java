@@ -1,8 +1,8 @@
 package me.headzz.discordbanannouncer.handle.entries.impl;
 
-import me.headzz.discordbanannouncer.DiscordBanAnnouncer;
 import me.headzz.discordbanannouncer.handle.entries.Entry;
 import me.headzz.discordbanannouncer.utility.GenericMessages;
+import me.headzz.discordbanannouncer.utility.Utilities;
 import me.headzz.discordbanannouncer.utility.WebhookColors;
 import me.headzz.discordbanannouncer.utility.WebhookUtils;
 
@@ -32,7 +32,7 @@ public class AddMute extends Entry {
 
     @Override
     public void executeDiscordWebhook() {
-        WebhookUtils.newWebhookUtils(DiscordBanAnnouncer.instance.getWebhookURL()).execute(String.format("{\"content\":null,\"embeds\":[{\"title\":\"New Mute\",\"color\":%s,\"fields\":[{\"name\":\"%s\",\"value\":\"%s\"},{\"name\":\"%s\",\"value\":\"%s\",\"inline\":true},{\"name\":\"%s\",\"value\":\"%s\",\"inline\":true},{\"name\":\"%s\",\"value\":\"%s\",\"inline\":true}],\"thumbnail\":{\"url\":\"%s\"}}],\"attachments\":[]}", WebhookColors.RED.getHexCode(),
+        WebhookUtils.newWebhookUtils(Utilities.getInstance().getWebhookURL()).execute(String.format("{\"content\":null,\"embeds\":[{\"title\":\"New Mute\",\"color\":%s,\"fields\":[{\"name\":\"%s\",\"value\":\"%s\"},{\"name\":\"%s\",\"value\":\"%s\",\"inline\":true},{\"name\":\"%s\",\"value\":\"%s\",\"inline\":true},{\"name\":\"%s\",\"value\":\"%s\",\"inline\":true}],\"thumbnail\":{\"url\":\"%s\"}}],\"attachments\":[]}", WebhookColors.RED.getHexCode(),
                 GenericMessages.USERNAME, super.getPlayerName(), GenericMessages.PUNISHED_BY, super.getStaffName(),
                 GenericMessages.DURATION, this.duration, GenericMessages.REASON, this.reason, super.getImageURL()));
     }

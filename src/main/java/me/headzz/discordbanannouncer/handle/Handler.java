@@ -1,8 +1,10 @@
 package me.headzz.discordbanannouncer.handle;
 
-import me.headzz.discordbanannouncer.DiscordBanAnnouncer;
+import litebans.api.PlayerProvider;
 import me.headzz.discordbanannouncer.handle.entries.Entry;
 import me.headzz.discordbanannouncer.handle.entries.impl.*;
+import me.headzz.discordbanannouncer.utility.ConfigUtils;
+import me.headzz.discordbanannouncer.utility.Utilities;
 import org.bukkit.Bukkit;
 
 import java.util.HashMap;
@@ -49,11 +51,11 @@ public final class Handler {
         final String uuid = entry.getUuid();
         String userName = this.getName(uuid);
         if (userName == null)
-            userName = String.format(uuid);
+            userName = uuid;
 
         final Entry newEntry = (Entry) clazz.getConstructors()[0].newInstance(userName, entry);
 
-        if (DiscordBanAnnouncer.instance.shouldUseBot()) {
+        if (Utilities.getInstance().shouldUseBot()) {
             newEntry.execute();
             return;
         }
@@ -65,7 +67,7 @@ public final class Handler {
         return this.entries;
     }
 
-    private String getName(final String name) {
-        return Bukkit.getOfflinePlayer(UUID.fromString(name)).getName();
+    private String getName(final String uuid) {
+        return ConfigUtils.getName(uuid);
     }
 }
